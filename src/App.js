@@ -5,6 +5,7 @@ import Login from './pages/login'
 import Header from './components/header'
 import Sidebar from './components/sidebar'
 import Department from './pages/department'
+import Semester from './pages/semester'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
                 <Routes>
                   <Route path='/' element={<Dashboard />} />
                   <Route path='/department' element={<Department />} />
+                  <Route path='/semester' element={<Semester />} />
                 </Routes>
               </div>
 

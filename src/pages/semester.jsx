@@ -2,27 +2,32 @@ import React, { useEffect, useState } from 'react'
 import PageTitle from '../components/pageTitle'
 import { getRequest, postRequest } from '../services/apiService'
 
-function Department() {
+function Semester() {
 
     const [datas, setDatas] = useState([])
-    const [inputName, setInputName] = useState('')
     const [isEdit, setIsEdit] = useState(false)
-    const [editId, setEditId] = useState('')
+
+    // DB Fields
+    const [idField, setIdField] = useState('')
+    const [nameField, setNameField] = useState('')
+    const [symbolField, setSymbolField] = useState('')
 
     const getData = async () => {
-        var tempData = await getRequest('department')
-        setDatas(tempData['departments'])
+        var tempData = await getRequest('semester')
+        setDatas(tempData['semesters'])
     }
 
     const addData = async() => {
-        await postRequest('add-department', {departmentName: inputName})
-        setInputName('')
+        await postRequest('add-semester', {name: nameField, symbol: symbolField})
+        setNameField('')
+        setSymbolField('')
     }
 
     const editData = async() => {
-        await postRequest(`edit-department`, {departmentId: editId, departmentName: inputName})
-        setInputName('')
-        setEditId('')
+        await postRequest(`edit-semester`, {id: idField, name: nameField, symbol: symbolField})
+        setIdField('')
+        setNameField('')
+        setSymbolField('')
         setIsEdit(false)
     }
 
@@ -35,14 +40,15 @@ function Department() {
 
     return (
         <div className='flex flex-col gap-5'>
-            <PageTitle title={'Department'} />
+            <PageTitle title={'Semester'} />
 
             <div className='flex flex-col gap-5'>
 
                 {/* Adding Data */}
                 <div className='bg-white flex flex-col gap-2 p-4 shadow-md rounded w-full'>
-                    <h2> { isEdit ? 'Edit' : 'Add' } Department</h2>
-                    <input value={inputName} onInput={(e) => setInputName(e.target.value)} type="text" placeholder='Title' className='border p-2 rounded-md border-gray-300 w-full' />
+                    <h2> { isEdit ? 'Edit' : 'Add' } Semester</h2>
+                    <input value={nameField} onInput={(e) => setNameField(e.target.value)} type="text" placeholder='Title' className='border p-2 rounded-md border-gray-300 w-full' />
+                    <input value={symbolField} onInput={(e) => setSymbolField(e.target.value)} type="text" placeholder='Symbol' className='border p-2 rounded-md border-gray-300 w-full' />
                     <div className='flex flex-wrap'>
                         {
                             isEdit ?
@@ -58,6 +64,7 @@ function Department() {
                     <thead className='border-b border-b-primary'>
                         <tr>
                             <td className="p-4 font-semibold">Name</td>
+                            <td className="p-4 font-semibold">Symbol</td>
                             <td className="p-4 font-semibold">Action</td>
                         </tr>
                     </thead>
@@ -67,13 +74,15 @@ function Department() {
                                 return (
                                     <tr key={index} className='border-b border-b-primary'>
                                         <td className="p-4">{data.name}</td>
+                                        <td className="p-4">{data.symbol}</td>
                                         <td className="p-4 flex gap-2">
                                             <button onClick={() => {
-                                                setEditId(data.id)
-                                                setInputName(data.name)
+                                                setIdField(data.id)
+                                                setNameField(data.name)
+                                                setSymbolField(data.symbol)
                                                 setIsEdit(true)
                                             }} className='bg-yellow-500 text-white px-4 py-1 rounded'>Edit</button>
-                                            <button onClick={() => { getRequest(`delete-department/${data.id}`) }} className='bg-red-500 text-white px-4 py-1 rounded'>Delete</button>
+                                            <button onClick={() => { getRequest(`delete-semester/${data.id}`) }} className='bg-red-500 text-white px-4 py-1 rounded'>Delete</button>
                                         </td>
                                     </tr>
                                 )
@@ -87,4 +96,4 @@ function Department() {
     )
 }
 
-export default Department
+export default Semester
